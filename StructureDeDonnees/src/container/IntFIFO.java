@@ -1,6 +1,8 @@
 package container;
 
+import javax.management.InvalidAttributeValueException;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class IntFIFO implements Queue<Integer> {
 
@@ -10,6 +12,13 @@ public class IntFIFO implements Queue<Integer> {
     private int e;
 
     public IntFIFO (int capacity) {
+        if (capacity < 2) {
+            try {
+                throw new InvalidAttributeValueException("Capacity should be at least 2");
+            } catch (InvalidAttributeValueException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
         tab = new Integer[capacity+1];
         b=0;
         e=0;
@@ -24,7 +33,7 @@ public class IntFIFO implements Queue<Integer> {
     }
 
     private void resize() {
-        int l = tab.length;
+        int l = this.size();
         Integer[] newTab = new Integer[l*2];
         for (int i=0; i<l; i++) {
             newTab[i]=popElement();
@@ -36,8 +45,9 @@ public class IntFIFO implements Queue<Integer> {
 
     @Override
     public boolean insertElement(Integer i) {
-        if (e == (b-1) % tab.length)  {
-            resize();
+
+        if (((e+1) % tab.length) == b) {
+            this.resize();
         }
         tab[e]=i;
         e=next(e);
@@ -46,13 +56,17 @@ public class IntFIFO implements Queue<Integer> {
 
     @Override
     public Integer element() {
-        assert b!=e;
+        if (b==e) {
+            throw new NoSuchElementException();
+        }
         return tab[b];
     }
 
     @Override
     public Integer popElement() {
-        assert b!=e;
+        if (b==e) {
+            throw new NoSuchElementException();
+        }
         Integer elt = tab[b];
         b=next(b);
         return elt;
@@ -64,8 +78,12 @@ public class IntFIFO implements Queue<Integer> {
     }
 
     @Override
-    public int size() { //à modif, pb quand e<b
-            return (e-b+tab.length) % tab.length;
+    public int size() {
+        if (e<b) {
+            return tab.length+e-b;
+        } else {
+            return e-b;
+        }
     }
 
     @Override
