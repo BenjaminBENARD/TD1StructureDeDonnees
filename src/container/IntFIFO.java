@@ -4,6 +4,8 @@ import javax.management.InvalidAttributeValueException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static java.lang.Math.max;
+
 public class IntFIFO implements Queue<Integer> {
 
     private Integer[] tab;
@@ -12,13 +14,6 @@ public class IntFIFO implements Queue<Integer> {
     private int e;
 
     public IntFIFO (int capacity) {
-        if (capacity < 2) {
-            try {
-                throw new InvalidAttributeValueException("Capacity should be at least 2");
-            } catch (InvalidAttributeValueException ex) {
-                throw new RuntimeException(ex);
-            }
-        }
         tab = new Integer[capacity+1];
         b=0;
         e=0;
@@ -34,7 +29,7 @@ public class IntFIFO implements Queue<Integer> {
 
     private void resize() {
         int l = this.size();
-        Integer[] newTab = new Integer[l*2];
+        Integer[] newTab = new Integer[max(4,l*2)];
         for (int i=0; i<l; i++) {
             newTab[i]=popElement();
         }
