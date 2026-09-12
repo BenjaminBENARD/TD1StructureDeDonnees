@@ -1,34 +1,33 @@
 package container;
 
-import javax.management.InvalidAttributeValueException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import static java.lang.Math.max;
 
-public class IntPriorityQueue implements Queue<Integer> {
+public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E> {
 
-    private Integer[] tab;
+    private Object[] tab;
 
     private int e;
 
-    public IntPriorityQueue(int capacity) {
-        tab = new Integer[capacity+1];
+    public GenPriorityQueue(int capacity) {
+        tab = new Object[capacity+1];
         e=0;
     }
 
     private void resize() {
         int l = this.size();
-        Integer[] newTab = new Integer[max(2,l*2)];
+        Object[] newTab = new Object[max(2,l*2)];
         for (int i=0; i<l; i++) {
-            newTab[i]=tab[i];
+            newTab[i]=(E) tab[i];
         }
         e = l;
         tab = newTab;
     }
 
     private void swap(int i ,int j) {
-        Integer temp=tab[i];
+        E temp= (E) tab[i];
         tab[i]=tab[j];
         tab[j]=temp;
     }
@@ -36,8 +35,8 @@ public class IntPriorityQueue implements Queue<Integer> {
     private int highest(int i){
         //return the index of the highest element between the parent i and his 2 possible children
         int child = 2*i+1;
-        if (child<e && tab[i]<tab[child]){
-            if (child+1<e && tab[child]<tab[child+1]){
+        if (child<e && ((E)tab[i]).compareTo((E) tab[child]) < 0) {
+            if (child+1<e && ((E)tab[child]).compareTo((E) tab[child+1]) < 0){
                 return child+1;
             } else {
                 return child;
@@ -50,7 +49,7 @@ public class IntPriorityQueue implements Queue<Integer> {
     private void montee(int i){
         int child = i;
         int root = (i-1)/2;
-        while (child>0 && tab[child]>tab[root]) {
+        while (child>0 && ((E)tab[child]).compareTo((E) tab[root]) < 0) {
             swap(child,root);
             child=root;
             root=(child-1)/2;
@@ -67,7 +66,7 @@ public class IntPriorityQueue implements Queue<Integer> {
     }
 
     @Override
-    public boolean insertElement(Integer elt) {
+    public boolean insertElement(E elt) {
         if (e==tab.length) {
             this.resize();
         }
@@ -78,19 +77,19 @@ public class IntPriorityQueue implements Queue<Integer> {
     }
 
     @Override
-    public Integer element() {
+    public E element() {
         if (e==0) {
             throw new NoSuchElementException();
         }
-        return tab[0];
+        return (E) tab[0];
     }
 
     @Override
-    public Integer popElement() {
+    public E popElement() {
         if (e==0) {
             throw new NoSuchElementException();
         }
-        Integer elt = tab[0];
+        E elt = (E) tab[0];
         e-=1;
         swap(0,e);
         descente(0);
