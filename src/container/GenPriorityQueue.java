@@ -113,6 +113,27 @@ public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E> {
 
     @Override
     public Iterator iterator() {
-        return null;
+        return new GenPriorityQueueIterator();
+    }
+
+    class GenPriorityQueueIterator implements Iterator<E> {
+        private Object[] data;
+        private int i = 0;
+        private int e;
+
+        GenPriorityQueueIterator() {
+            data = GenPriorityQueue.this.tab;
+            e= GenPriorityQueue.this.e;
+        }
+
+        public boolean hasNext () {
+            return i<e;
+        }
+
+        public E next() {
+            E val = (E) data[i];
+            i++;
+            return val;
+        }
     }
 }

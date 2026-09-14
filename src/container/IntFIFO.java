@@ -86,6 +86,7 @@ public class IntFIFO implements Queue<Integer> {
     public Iterator iterator() {
         return new IntFIFOIterator();
     }
+
     class IntFIFOIterator implements Iterator<Integer> {
 
         private Integer[] data;

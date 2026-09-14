@@ -114,6 +114,27 @@ public class IntPriorityQueue implements Queue<Integer> {
 
     @Override
     public Iterator iterator() {
-        return null;
+        return new IntPriorityQueueIterator();
+    }
+
+    class IntPriorityQueueIterator implements Iterator<Integer> {
+        private Integer[] data;
+        private int i = 0;
+        private int e;
+
+        IntPriorityQueueIterator() {
+            data = IntPriorityQueue.this.tab;
+            e= IntPriorityQueue.this.e;
+        }
+
+        public boolean hasNext () {
+            return i<e;
+        }
+
+        public Integer next() {
+            Integer val = data[i];
+            i++;
+            return val;
+        }
     }
 }
