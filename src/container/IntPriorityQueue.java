@@ -43,7 +43,11 @@ public class IntPriorityQueue implements Queue<Integer> {
                 return child;
             }
         } else {
-            return i;
+            if (child+1<e && tab[i]<tab[child+1]) {
+                return child + 1;
+            } else {
+                return i;
+            }
         }
     }
 
@@ -93,6 +97,7 @@ public class IntPriorityQueue implements Queue<Integer> {
         Integer elt = tab[0];
         e-=1;
         swap(0,e);
+        tab[e]=null;
         descente(0);
         return elt;
     }

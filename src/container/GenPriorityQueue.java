@@ -35,21 +35,25 @@ public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E> {
     private int highest(int i){
         //return the index of the highest element between the parent i and his 2 possible children
         int child = 2*i+1;
-        if (child<e && ((E)tab[i]).compareTo((E) tab[child]) < 0) {
-            if (child+1<e && ((E)tab[child]).compareTo((E) tab[child+1]) < 0){
+        if (child<e && ((E)tab[i]).compareTo((E) tab[child]) > 0) {
+            if (child+1<e && ((E)tab[child]).compareTo((E) tab[child+1]) > 0){
                 return child+1;
             } else {
                 return child;
             }
         } else {
-            return i;
+            if (child+1<e && ((E)tab[i]).compareTo((E) tab[child+1]) > 0) {
+                return child + 1;
+            } else {
+                return i;
+            }
         }
     }
 
     private void montee(int i){
         int child = i;
         int root = (i-1)/2;
-        while (child>0 && ((E)tab[child]).compareTo((E) tab[root]) < 0) {
+        while (child>0 && ((E)tab[child]).compareTo((E) tab[root]) > 0) {
             swap(child,root);
             child=root;
             root=(child-1)/2;
@@ -92,6 +96,7 @@ public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E> {
         E elt = (E) tab[0];
         e-=1;
         swap(0,e);
+        tab[e]=null;
         descente(0);
         return elt;
     }

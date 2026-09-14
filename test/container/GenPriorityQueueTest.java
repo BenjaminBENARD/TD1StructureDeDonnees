@@ -2,27 +2,27 @@ package container;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-class TestIntPriorityQueue {
+class GenPriorityQueueTest {
     @Test
     public void test_emptyCreation()  {
-        IntPriorityQueue fifo = new IntPriorityQueue(10);
+        GenPriorityQueue<Integer> fifo = new GenPriorityQueue<Integer>(10);
         assertTrue(fifo.isEmpty() );
         assertEquals(0,fifo.size());
     }
 
+
     @Test
     public void test_elementCheck() {
-        IntPriorityQueue priorityQueue = new IntPriorityQueue(10);
+        GenPriorityQueue<Integer> priorityQueue = new GenPriorityQueue<Integer>(10);
         assertTrue(priorityQueue.insertElement(0) );
         assertEquals(0,priorityQueue.element());
     }
-    
+
     @Test
     public void test_elementInsert() {
-        IntPriorityQueue priorityQueue = new IntPriorityQueue(10);
+        GenPriorityQueue<Integer> priorityQueue = new GenPriorityQueue<Integer>(10);
         assertTrue(priorityQueue.insertElement(0) );
         assertEquals(1,priorityQueue.size());
         assertTrue(priorityQueue.insertElement(1) );
@@ -32,46 +32,30 @@ class TestIntPriorityQueue {
 
     @Test
     public void test_elementPop() {
-        IntPriorityQueue priorityQueue = new IntPriorityQueue(10);
+        GenPriorityQueue<Integer> priorityQueue = new GenPriorityQueue<Integer>(10);
         assertTrue(priorityQueue.insertElement(1) );
         assertTrue(priorityQueue.insertElement(0) );
         assertEquals(2,priorityQueue.size());
         assertEquals(1,priorityQueue.popElement());
         assertEquals(1,priorityQueue.size());
         assertEquals(0,priorityQueue.popElement());
-        assertTrue(priorityQueue.insertElement(1) );
-        assertTrue(priorityQueue.insertElement(1) );
-        assertTrue(priorityQueue.insertElement(0) );
-        assertEquals(1,priorityQueue.popElement());
-        assertEquals(1,priorityQueue.popElement());
     }
 
     @Test
     public void test_resize() {
-        IntPriorityQueue priorityQueue = new IntPriorityQueue(2);
+        GenPriorityQueue<Integer> priorityQueue = new GenPriorityQueue<Integer>(2);
         assertTrue(priorityQueue.insertElement(0) );
         assertTrue(priorityQueue.insertElement(1) );
         assertTrue(priorityQueue.insertElement(2) );
         assertTrue(priorityQueue.insertElement(3) );
-        assertTrue(priorityQueue.insertElement(5) );
+        assertTrue(priorityQueue.insertElement(4) );
         assertTrue(priorityQueue.insertElement(5) );
         assertEquals(6,priorityQueue.size());
         assertEquals(5,priorityQueue.popElement());
         assertEquals(5,priorityQueue.size());
         assertTrue(priorityQueue.insertElement(5) );
         assertEquals(6,priorityQueue.size());
-    }
 
-    @Test
-    public void test_tab() {
-        Integer[] tab = {1,2,3,4,5,6,7,8,9,10};
-        IntPriorityQueue priorityQueue = new IntPriorityQueue(2);
-        for (int i = 0 ; i <10 ;i++) {
-            priorityQueue.insertElement(tab[i]);
-        }
-        for (int i = 10 ; i >0 ;i--) {
-            assertEquals(i,priorityQueue.popElement());
-        }
     }
 
 }

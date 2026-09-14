@@ -63,6 +63,7 @@ public class IntFIFO implements Queue<Integer> {
             throw new NoSuchElementException();
         }
         Integer elt = tab[b];
+        tab[b]=null;
         b=next(b);
         return elt;
     }
