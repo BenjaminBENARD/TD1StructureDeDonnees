@@ -84,6 +84,27 @@ public class IntFIFO implements Queue<Integer> {
 
     @Override
     public Iterator iterator() {
-        return null;
+        return new IntFIFOIterator();
+    }
+    class IntFIFOIterator implements Iterator<Integer> {
+
+        private Integer[] data;
+        private int i;
+        private int e;
+
+        IntFIFOIterator() {
+            data = IntFIFO.this.tab;
+            i = IntFIFO.this.b;
+            e= IntFIFO.this.e;
+        }
+
+        public boolean hasNext () {
+            return i<e;
+        }
+        public Integer next() {
+            Integer val = data[i];
+            i++;
+            return val;
+        }
     }
 }

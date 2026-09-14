@@ -50,7 +50,6 @@ public class TestIntFIFO  {
     }
 
     @Test
-
     public void test_circular() {
         IntFIFO fifo = new IntFIFO(2);
         assertTrue(fifo.insertElement(0) );
@@ -65,6 +64,21 @@ public class TestIntFIFO  {
         assertEquals(3,fifo.popElement());
         assertEquals(4,fifo.popElement());
         assertEquals(0,fifo.size());
+    }
+
+    @Test
+    public void test_iterator() {
+        IntFIFO fifo = new IntFIFO(10);
+        for(int i=0; i<10; i++) {
+            fifo.insertElement(i);
+        }
+        int i = 0;
+        for(Integer elt : fifo) {
+            System.out.println(elt);
+            assertEquals(i,fifo.popElement());
+            i++;
+        }
+        assertEquals(10,i);
     }
 }
 
