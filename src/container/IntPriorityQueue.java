@@ -13,7 +13,7 @@ public class IntPriorityQueue implements Queue<Integer> {
     private int e;
 
     public IntPriorityQueue(int capacity) {
-        tab = new Integer[capacity+1];
+        tab = new Integer[capacity];
         e=0;
     }
 
@@ -33,22 +33,21 @@ public class IntPriorityQueue implements Queue<Integer> {
         tab[j]=temp;
     }
 
-    private int highest(int i){
-        //return the index of the highest element between the parent i and his 2 possible children
-        int child = 2*i+1;
-        if (child<e && tab[i]<tab[child]){
-            if (child+1<e && tab[child]<tab[child+1]){
-                return child+1;
-            } else {
-                return child;
-            }
-        } else {
-            if (child+1<e && tab[i]<tab[child+1]) {
-                return child + 1;
-            } else {
-                return i;
-            }
+    private int highest(int i) {
+        int highest = i;
+
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        if (left < e && tab[left] > tab[highest]) {
+            highest = left;
         }
+
+        if (right < e && tab[right] > tab[highest]) {
+            highest = right;
+        }
+
+        return highest;
     }
 
     private void montee(int i){
@@ -76,8 +75,8 @@ public class IntPriorityQueue implements Queue<Integer> {
             this.resize();
         }
         tab[e]=elt;
-        montee(e);
         e+=1;
+        montee(e-1);
         return true;
     }
 
@@ -132,6 +131,9 @@ public class IntPriorityQueue implements Queue<Integer> {
         }
 
         public Integer next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
             Integer val = data[i];
             i++;
             return val;

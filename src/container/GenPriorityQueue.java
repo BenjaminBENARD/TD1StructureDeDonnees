@@ -12,7 +12,7 @@ public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E> {
     private int e;
 
     public GenPriorityQueue(int capacity) {
-        tab = new Object[capacity+1];
+        tab = new Object[capacity];
         e=0;
     }
 
@@ -32,22 +32,21 @@ public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E> {
         tab[j]=temp;
     }
 
-    private int highest(int i){
-        //return the index of the highest element between the parent i and his 2 possible children
-        int child = 2*i+1;
-        if (child<e && ((E)tab[i]).compareTo((E) tab[child]) > 0) {
-            if (child+1<e && ((E)tab[child]).compareTo((E) tab[child+1]) > 0){
-                return child+1;
-            } else {
-                return child;
-            }
-        } else {
-            if (child+1<e && ((E)tab[i]).compareTo((E) tab[child+1]) > 0) {
-                return child + 1;
-            } else {
-                return i;
-            }
+    private int highest(int i) {
+        int highest = i;
+
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        if (left < e && ((E)tab[left]).compareTo((E) tab[highest]) > 0) {
+            highest = left;
         }
+
+        if (right < e && ((E)tab[right]).compareTo((E) tab[highest]) > 0) {
+            highest = right;
+        }
+
+        return highest;
     }
 
     private void montee(int i){
@@ -131,6 +130,9 @@ public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E> {
         }
 
         public E next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
             E val = (E) data[i];
             i++;
             return val;

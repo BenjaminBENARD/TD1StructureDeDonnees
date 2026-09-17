@@ -100,11 +100,15 @@ public class IntFIFO implements Queue<Integer> {
         }
 
         public boolean hasNext () {
-            return i<e;
+            return i!=e;
         }
+
         public Integer next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
             Integer val = data[i];
-            i++;
+            i = IntFIFO.this.next(i);
             return val;
         }
     }
