@@ -111,7 +111,7 @@ public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E> {
     }
 
     @Override
-    public Iterator iterator() {
+    public Iterator<E> iterator() {
         return new GenPriorityQueueIterator();
     }
 

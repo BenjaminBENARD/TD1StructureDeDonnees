@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GenPriorityQueueTest {
+class TestGenPriorityQueue {
     @Test
     public void test_emptyCreation()  {
         GenPriorityQueue<Integer> fifo = new GenPriorityQueue<Integer>(10);
