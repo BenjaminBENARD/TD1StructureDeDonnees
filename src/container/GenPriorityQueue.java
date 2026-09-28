@@ -7,27 +7,27 @@ import static java.lang.Math.max;
 
 public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E> {
 
-    private Object[] tab;
+    private E tab[];
 
     private int e;
 
     public GenPriorityQueue(int capacity) {
-        tab = new Object[capacity];
+        tab = (E[]) new Comparable[capacity];
         e=0;
     }
 
     private void resize() {
         int l = this.size();
-        Object[] newTab = new Object[max(2,l*2)];
+        E[] newTab = (E[]) new Comparable[max(2,l*2)];
         for (int i=0; i<l; i++) {
-            newTab[i]=(E) tab[i];
+            newTab[i]= tab[i];
         }
         e = l;
         tab = newTab;
     }
 
     private void swap(int i ,int j) {
-        E temp= (E) tab[i];
+        E temp= tab[i];
         tab[i]=tab[j];
         tab[j]=temp;
     }
@@ -38,11 +38,11 @@ public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E> {
         int left = 2 * i + 1;
         int right = 2 * i + 2;
 
-        if (left < e && ((E)tab[left]).compareTo((E) tab[highest]) > 0) {
+        if (left < e && (tab[left]).compareTo( tab[highest]) > 0) {
             highest = left;
         }
 
-        if (right < e && ((E)tab[right]).compareTo((E) tab[highest]) > 0) {
+        if (right < e && (tab[right]).compareTo( tab[highest]) > 0) {
             highest = right;
         }
 
@@ -52,7 +52,7 @@ public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E> {
     private void montee(int i){
         int child = i;
         int root = (i-1)/2;
-        while (child>0 && ((E)tab[child]).compareTo((E) tab[root]) > 0) {
+        while (child>0 && (tab[child]).compareTo( tab[root]) > 0) {
             swap(child,root);
             child=root;
             root=(child-1)/2;
@@ -84,7 +84,7 @@ public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E> {
         if (e==0) {
             throw new NoSuchElementException();
         }
-        return (E) tab[0];
+        return tab[0];
     }
 
     @Override
@@ -92,7 +92,7 @@ public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E> {
         if (e==0) {
             throw new NoSuchElementException();
         }
-        E elt = (E) tab[0];
+        E elt = tab[0];
         e-=1;
         swap(0,e);
         tab[e]=null;
@@ -116,7 +116,7 @@ public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E> {
     }
 
     class GenPriorityQueueIterator implements Iterator<E> {
-        private Object[] data;
+        private E[] data;
         private int i = 0;
         private int e;
 
@@ -133,7 +133,7 @@ public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E> {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            E val = (E) data[i];
+            E val = data[i];
             i++;
             return val;
         }

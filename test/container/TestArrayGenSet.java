@@ -9,12 +9,12 @@ import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TestGenSet {
+class TestArrayGenSet {
 
 
     @Test
     void nouvelEnsembleEstVide() {
-        GenSet<Integer> set = new GenSet<>();
+        ArrayGenSet<Integer> set = new ArrayGenSet<>(1);
 
         assertTrue(set.isEmpty());
         assertEquals(0, set.size());
@@ -23,7 +23,7 @@ class TestGenSet {
 
     @Test
     void insertionDunElement() {
-        GenSet<Integer> set = new GenSet<>();
+        ArrayGenSet<Integer> set = new ArrayGenSet<>(1);
 
         assertTrue(set.insertElement(42));
 
@@ -34,7 +34,7 @@ class TestGenSet {
 
     @Test
     void insertionDePlusieursElements() {
-        GenSet<Integer> set = new GenSet<>();
+        ArrayGenSet<Integer> set = new ArrayGenSet<>(1);
 
         assertTrue(set.insertElement(8));
         assertTrue(set.insertElement(3));
@@ -53,7 +53,7 @@ class TestGenSet {
 
     @Test
     void containsElementPresent() {
-        GenSet<Integer> set = new GenSet<>();
+        ArrayGenSet<Integer> set = new ArrayGenSet<>(1);
 
         set.insertElement(10);
         set.insertElement(5);
@@ -67,7 +67,7 @@ class TestGenSet {
 
     @Test
     void containsElementAbsent() {
-        GenSet<Integer> set = new GenSet<>();
+        ArrayGenSet<Integer> set = new ArrayGenSet<>(1);
 
         set.insertElement(10);
         set.insertElement(5);
@@ -81,7 +81,7 @@ class TestGenSet {
 
     @Test
     void valeursNegatives() {
-        GenSet<Integer> set = new GenSet<>();
+        ArrayGenSet<Integer> set = new ArrayGenSet<>(1);
 
         set.insertElement(0);
         set.insertElement(-10);
@@ -101,7 +101,7 @@ class TestGenSet {
 
     @Test
     void iterateurEnsembleVide() {
-        GenSet<Integer> set = new GenSet<>();
+        ArrayGenSet<Integer> set = new ArrayGenSet<>(1);
 
         Iterator<Integer> iterator = set.iterator();
 
@@ -111,7 +111,7 @@ class TestGenSet {
 
     @Test
     void iterateurUnElement() {
-        GenSet<Integer> set = new GenSet<>();
+        ArrayGenSet<Integer> set = new ArrayGenSet<>(1);
 
         set.insertElement(42);
 
@@ -124,7 +124,7 @@ class TestGenSet {
 
     @Test
     void nextApresFinDoitLeverException() {
-        GenSet<Integer> set = new GenSet<>();
+        ArrayGenSet<Integer> set = new ArrayGenSet<>(1);
 
         set.insertElement(42);
 
@@ -140,7 +140,7 @@ class TestGenSet {
 
     @Test
     void iterateurParcoursDansOrdreCroissant() {
-        GenSet<Integer> set = new GenSet<>();
+        ArrayGenSet<Integer> set = new ArrayGenSet<>(1);
 
         set.insertElement(8);
         set.insertElement(3);

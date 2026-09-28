@@ -7,19 +7,19 @@ import java.util.NoSuchElementException;
 import static java.lang.Math.max;
 
 public class GenPriorityQueueCmp<E> implements Queue<E> {
-    private Object[] tab;
+    private E[] tab;
     private Comparator<? super E> c;
     private int e;
 
     public GenPriorityQueueCmp(int capacity, Comparator<? super E> comparator ) {
-        tab = new Object[capacity];
+        tab = (E[]) new Object[capacity];
         e=0;
         c=comparator;
     }
 
     private void resize() {
         int l = this.size();
-        Object[] newTab = new Object[max(2,l*2)];
+        E[] newTab = (E[]) new Object[max(2,l*2)];
         for (int i=0; i<l; i++) {
             newTab[i]=(E) tab[i];
         }
@@ -28,9 +28,9 @@ public class GenPriorityQueueCmp<E> implements Queue<E> {
     }
 
     private void swap(int i ,int j) {
-        E temp= (E) tab[i];
-        tab[i]=tab[j];
-        tab[j]=temp;
+        E temp = tab[i];
+        tab[i] = tab[j];
+        tab[j] = temp;
     }
 
     private int highest(int i) {
@@ -39,11 +39,11 @@ public class GenPriorityQueueCmp<E> implements Queue<E> {
         int left = 2 * i + 1;
         int right = 2 * i + 2;
 
-        if (left < e && (c.compare((E)tab[left],(E) tab[highest]) > 0)) {
+        if (left < e && (c.compare(tab[left] , tab[highest]) > 0)) {
             highest = left;
         }
 
-        if (right < e && (c.compare((E)tab[right],(E) tab[highest]) > 0)) {
+        if (right < e && (c.compare(tab[right] , tab[highest]) > 0)) {
             highest = right;
         }
 
@@ -53,10 +53,10 @@ public class GenPriorityQueueCmp<E> implements Queue<E> {
     private void montee(int i){
         int child = i;
         int root = (i-1)/2;
-        while (child>0 && c.compare((E)tab[child],(E) tab[root]) > 0) {
+        while (child>0 && c.compare(tab[child] , tab[root]) > 0) {
             swap(child,root);
-            child=root;
-            root=(child-1)/2;
+            child = root;
+            root = (child-1)/2;
         }
     }
 
@@ -85,7 +85,7 @@ public class GenPriorityQueueCmp<E> implements Queue<E> {
         if (e==0) {
             throw new NoSuchElementException();
         }
-        return (E) tab[0];
+        return tab[0];
     }
 
     @Override
@@ -93,10 +93,10 @@ public class GenPriorityQueueCmp<E> implements Queue<E> {
         if (e==0) {
             throw new NoSuchElementException();
         }
-        E elt = (E) tab[0];
-        e-=1;
+        E elt = tab[0];
+        --e;
         swap(0,e);
-        tab[e]=null;
+        tab[e] = null;
         descente(0);
         return elt;
     }
@@ -117,7 +117,7 @@ public class GenPriorityQueueCmp<E> implements Queue<E> {
     }
 
     class GenPriorityQueueCmpIterator implements Iterator<E> {
-        private Object[] data;
+        private E[] data;
         private int i = 0;
         private int e;
 
@@ -134,7 +134,7 @@ public class GenPriorityQueueCmp<E> implements Queue<E> {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            E val = (E) data[i];
+            E val = data[i];
             i++;
             return val;
         }

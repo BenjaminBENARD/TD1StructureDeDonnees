@@ -2,27 +2,45 @@ package container;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Comparator;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-class TestGenPriorityQueue {
+class TestGenPriorityQueueCmp {
+
+    public class MyComparator implements Comparator<Integer> {
+
+        public int compare(Integer a, Integer b) {
+            if (a<b) {
+                return -1;
+            } else if (a==b) {
+                return 0;
+            } else {
+                return 1;
+            }
+        }
+    }
+
+    public MyComparator c = new MyComparator();
+
     @Test
     public void test_emptyCreation()  {
-        GenPriorityQueue<Integer> priorityQueue = new GenPriorityQueue<Integer>(10);
-        assertTrue(priorityQueue.isEmpty() );
-        assertEquals(0,priorityQueue.size());
+        GenPriorityQueueCmp<Integer> fifo = new GenPriorityQueueCmp<Integer>(10,c);
+        assertTrue(fifo.isEmpty() );
+        assertEquals(0,fifo.size());
     }
 
 
     @Test
     public void test_elementCheck() {
-        GenPriorityQueue<Integer> priorityQueue = new GenPriorityQueue<Integer>(10);
+        GenPriorityQueueCmp<Integer> priorityQueue = new GenPriorityQueueCmp<Integer>(10,c);
         assertTrue(priorityQueue.insertElement(0) );
         assertEquals(0,priorityQueue.element());
     }
 
     @Test
     public void test_elementInsert() {
-        GenPriorityQueue<Integer> priorityQueue = new GenPriorityQueue<Integer>(10);
+        GenPriorityQueueCmp<Integer> priorityQueue = new GenPriorityQueueCmp<Integer>(10,c);
         assertTrue(priorityQueue.insertElement(0) );
         assertEquals(1,priorityQueue.size());
         assertTrue(priorityQueue.insertElement(1) );
@@ -32,7 +50,7 @@ class TestGenPriorityQueue {
 
     @Test
     public void test_elementPop() {
-        GenPriorityQueue<Integer> priorityQueue = new GenPriorityQueue<Integer>(10);
+        GenPriorityQueueCmp<Integer> priorityQueue = new GenPriorityQueueCmp<Integer>(10,c);
         assertTrue(priorityQueue.insertElement(1) );
         assertTrue(priorityQueue.insertElement(0) );
         assertEquals(2,priorityQueue.size());
@@ -43,7 +61,7 @@ class TestGenPriorityQueue {
 
     @Test
     public void test_resize() {
-        GenPriorityQueue<Integer> priorityQueue = new GenPriorityQueue<Integer>(2);
+        GenPriorityQueueCmp<Integer> priorityQueue = new GenPriorityQueueCmp<Integer>(2,c);
         assertTrue(priorityQueue.insertElement(0) );
         assertTrue(priorityQueue.insertElement(1) );
         assertTrue(priorityQueue.insertElement(2) );
@@ -57,5 +75,4 @@ class TestGenPriorityQueue {
         assertEquals(6,priorityQueue.size());
 
     }
-
 }

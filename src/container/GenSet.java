@@ -4,62 +4,63 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Stack;
 
-import static java.lang.Math.max;
+public class GenSet<E extends Comparable<E>> implements SetContainer<E> {
 
-public class GenSet<E extends Comparable<E>> implements SetContainer<E>{
-
-    private Object[] tab;
-    private int size;
-
-    private void resize() {
-        int l = this.tab.length;
-        Object[] newTab = new Object[max(3,l*2)];
-        for (int i=0; i<l; i++) {
-            newTab[i]=(E) tab[i];
+    private static class Node<E> {
+        public Node<E> left;
+        public Node<E> right;
+        public E element;
+        public Node(E elt, Node<E> fg, Node<E> fd) {
+            element = elt;
+            left = fg;
+            right = fd;
         }
-        tab = newTab;
+
     }
 
-    public GenSet(int capacity) {
-        tab = new Object[capacity];
-        size=0;
+    private Node<E> tree;
+    private int size;
+
+    public GenSet() {
+        tree = new Node(null,null,null);
+        size = 0;
     }
 
     @Override
     public boolean insertElement(E e) {
-        int i = 0;
-        while (tab[i] != null) {
-            if (e.compareTo(((E) tab[i])) < 0) { //il faut aller à gauche
-                i = 2 * i + 1;
+        Node<E> current = tree;
+        while (current.element != null) {
+            if (e.compareTo(current.element) < 0) { //il faut aller à gauche
+                current = current.left;
             } else { //il faut aller à droite, par convention en cas d'égalité on va à droite
-                i = 2 * i + 2;
-            }
-            if (i>=this.tab.length) {
-                this.resize();
+                current = current.right;
             }
         }
-        this.tab[i]=e;
+        current.element = e;
+        current.left = new Node<E>(null,null,null);
+        current.right = new Node<E>(null,null,null);
         ++this.size;
         return true;
     }
 
     @Override
     public boolean contains(E e) {
-        int i = 0;
-        while (i<this.tab.length && this.tab[i] != null && !((E)this.tab[i]).equals(e)) {
-            if (e.compareTo(((E) tab[i])) < 0) { //il faut aller à gauche
-                i = 2 * i + 1;
+        Node<E> current = tree;
+        while (current.element != null && current.element != e) {
+            if (e.compareTo(current.element) < 0) { //il faut aller à gauche
+                current = current.left;
             } else { //il faut aller à droite
-                i = 2 * i + 2;
+                current = current.right;
             }
         }
-        return (i<this.tab.length && ((E)this.tab[i]).equals(e));
+        return (current.element == e);
     }
 
     @Override
     public boolean isEmpty() {
-        return (size==0);
+        return size==0;
     }
 
     @Override
@@ -69,50 +70,41 @@ public class GenSet<E extends Comparable<E>> implements SetContainer<E>{
 
     @Override
     public @NotNull Iterator<E> iterator() {
-        return new GenSet.GenSetIterator();
+        return new GenSet.GenSetTreeIterator();
     }
 
-    class GenSetIterator implements Iterator<E> {
-        private Object[] data;
-        private int i;
-        private int s;
-        private int count=0;
+    class GenSetTreeIterator implements Iterator<E> {
+        private Stack<Node<E>> stack = new Stack();
+        private Node<E> current;
 
-        GenSetIterator() {
-            data = GenSet.this.tab;
-            s = GenSet.this.size;
-            i = 0;
-            while (2*i+1 < data.length && data[2*i+1] != null) {
-                i = 2*i+1;
+        GenSetTreeIterator() {
+            current = GenSet.this.tree;
+            while (current.element != null) {
+                stack.add(current);
+                current = current.left;
             }
         }
 
         public boolean hasNext () {
-            return count<size;
+            return ! stack.isEmpty();
         }
 
         public E next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            E val = (E) data[i];
-            if (2 * i + 2 < data.length && data[2 * i + 2] != null) { //fils droit existe
-                i = 2 * i + 2;
-                while (2 * i + 1 < data.length && data[2 * i + 1] != null) {
-                    i = 2 * i + 1;
-                }
-            } else { // pas de fils droit
-                if (i % 2 == 1) { // on est à gauche et le fils droit n'existe pas, on remonte
-                    i = (i - 1) / 2;
-                } else { //on est à droite, on doit forcément remonter jusqu'à arriver à gauche
-                    while (i%2 == 0 && i>0) { // i>0 évite de boucler à l'infini si il n'y a qu'un élément
-                        i = (i - 1) / 2;
-                    }
-                    i = (i - 1) / 2;
+            current = stack.pop();
+            E elt = current.element;
+            if (current.right.element != null) { //fils droit existe
+                current = current.right;
+                while (current.element != null) {
+                    stack.add(current);
+                    current = current.left ;
                 }
             }
-            ++count;
-            return val;
+            return elt;
         }
+
     }
+
 }
